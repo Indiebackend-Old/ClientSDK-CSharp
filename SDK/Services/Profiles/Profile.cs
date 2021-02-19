@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Indiebackend.API;
+using Indiebackend.API.Services.Notifications;
 using Indiebackend.API.Services.Profiles;
+using Indiebackend.API.Utils.Extensions;
 
 namespace Indiebackend.SDK.Services
 {
@@ -11,12 +13,15 @@ namespace Indiebackend.SDK.Services
 
 		private IndiebackendAPI _api;
 		private string _playerToken;
+		private NotificationsListener _notifications;
 
 		public Profile(IndiebackendAPI api, string playerToken, ApiProfile profile)
 		{
 			_api = api;
 			_playerToken = playerToken;
 			UpdateFromAPIResult(profile);
+			_notifications = _api.Notifications.Subscribe(Id);
+			_notifications.OnNotification += (notification) => notification.Log("[Notification]");
 		}
 
 		public async Task<Profile> Refresh()

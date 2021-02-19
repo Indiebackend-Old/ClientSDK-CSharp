@@ -15,7 +15,8 @@ namespace Test.SDK
 
 		private static Indiebackend.SDK.Indiebackend _api;
 
-		public static async Task Test() {
+		public static async Task Test()
+		{
 			_api = new Indiebackend.SDK.Indiebackend(APP_ID);
 
 			try
@@ -23,7 +24,8 @@ namespace Test.SDK
 
 				"Registering player...".Log();
 
-				Player player = await _api.Players.LoginWithEmail(new LoginPlayerEmailRequest {
+				Player player = await _api.Players.LoginWithEmail(new LoginPlayerEmailRequest
+				{
 					Email = "julien.lavocat@gmail.com",
 					Password = "220100Jl!",
 				});
@@ -33,14 +35,12 @@ namespace Test.SDK
 
 				Group<object, object> group = await profile.Groups.Get<object, object>("c22ThIHM1DVXJHkHeaah");
 
-				group.Log();
+				// await group.SetPublicData("This is where the fun begin !");
+				// await group.SetPrivateData("I am your father");
 
-				(await group.SetPublicData("This is where the fun begin !")).PublicData.Log();
-				(await group.SetPrivateData("I am your father")).PrivateData.Log();
+				await group.SetData("Oh no !", "Anyway");
 
-				group.Log();
-
-				(await group.SetData("Oh no !", "Anyway")).Log();
+				await Task.Delay(2000);
 			}
 			catch (IndieBackendError e)
 			{

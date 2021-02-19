@@ -5,48 +5,26 @@ using SuperSocket.ClientEngine;
 
 namespace Indiebackend.API.Services.Notifications
 {
-	public class NotificationsAPI : IndiebackendService, IBasicListener
+	public class NotificationsAPI : IndiebackendService
 	{
-		private const string LOG_PREFIX = "NotificationsAPI";
+
+		private Socket _socket;
 
 		public NotificationsAPI(HttpUtils http, string host) : base(http, "/notifications")
 		{
 			// Technically this service has no use for http... but maybe in the future ?
+			host.Log();
+			_socket = new Socket(host);
+			_socket.SetListerner(new SocketListener());
 
-			Socket socket = new Socket(host);
-			socket.SetListerner(this);
-			
-			socket.SetReconnectStrategy(new ReconnectStrategy().SetMaxAttempts(30));
-			socket.Connect();
+			_socket.SetReconnectStrategy(new ReconnectStrategy().SetMaxAttempts(30));
+			_socket.Connect();
 		}
 
-		public void OnConnected(Socket socket)
-		{
-			"Connected to notifications API".Log(LOG_PREFIX);
-
-			socket.CreateChannel("");
-			socket.CreateChannel("");
-
+		public NotificationsListener Subscribe(string channelName) {
+			var channel = _socket.CreateChannel(channelName);
+			return new NotificationsListener(channel, channelName);
 		}
 
-		public void OnDisconnected(Socket socket)
-		{
-			"Disconnected from notifications API".Log(LOG_PREFIX);
-		}
-
-		public void OnConnectError(Socket socket, ErrorEventArgs e)
-		{
-			"An error occured while connecting to Notifications API".Log(LOG_PREFIX);
-		}
-
-		public void OnAuthentication(Socket socket, bool status)
-		{
-			$"Authenticated state changed to: {status}".Log(LOG_PREFIX);
-		}
-
-		public void OnSetAuthToken(string token, Socket socket)
-		{
-			"Auth token set".Log(LOG_PREFIX);
-		}
 	}
 }

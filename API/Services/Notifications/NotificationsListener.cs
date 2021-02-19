@@ -7,7 +7,6 @@ namespace Indiebackend.API.Services.Notifications
 {
 	public class NotificationsListener
 	{
-
 		public event Action<Notification> OnNotification;
 
 		private Socket.Channel channel;
@@ -20,23 +19,25 @@ namespace Indiebackend.API.Services.Notifications
 
 			channel.Subscribe();
 
-			channel.OnMessage((channelName, data) =>
+			channel.OnMessage((channelName, rawData) =>
 			{
-				if (!(data is JObject))
+				if (!(rawData is JObject))
 					return;
 
-				switch ()
+				JObject payload = (JObject) rawData;
+				string type = payload["type"].Value<string>();
+				JObject data = (JObject) payload["data"];
+				switch (type)
 				{
-
+					case "GROUP_DATA_UPDATED":
+						string groupId = ((JObject) data["group"])["id"].Value<string>();
+						OnNotification.Invoke(new  GroupUpdatedNotification(groupId));
+						break;
 					default:
+						OnNotification.Invoke(new BasicNotification(type));
+						break;
 				}
-
-					data.Log($"[Notification - {channelName}]");
-
-				OnNotification?.Invoke(new Notification());
 			});
 		}
-
 	}
-
 }

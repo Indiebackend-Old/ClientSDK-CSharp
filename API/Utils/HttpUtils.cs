@@ -13,13 +13,14 @@ namespace Indiebackend.API.Utils
 {
 	public class HttpUtils
 	{
-		private const string API_GATEWAY = "http://localhost:3000";
 
 		private readonly string _appId;
+		private readonly string _host;
 		private readonly HttpClient _client = new HttpClient();
 
-		public HttpUtils(string appId)
+		public HttpUtils(string host, string appId)
 		{
+			_host = host;
 			_appId = appId;
 		}
 
@@ -53,7 +54,7 @@ namespace Indiebackend.API.Utils
 			// (method + " - " + API_GATEWAY + url).Log("Request url");
 			// if(body != null) JsonConvert.SerializeObject(body).Log("Body");
 
-			using HttpRequestMessage request = new HttpRequestMessage(method, API_GATEWAY + url);
+			using HttpRequestMessage request = new HttpRequestMessage(method, _host + url);
 			if (body != null)
 				request.Content =
 					new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
