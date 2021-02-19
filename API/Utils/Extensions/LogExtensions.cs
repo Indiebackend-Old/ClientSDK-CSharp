@@ -46,11 +46,6 @@ namespace Indiebackend.API.Utils.Extensions
 			Print(string.Join(",", value), name);
 		}
 
-		public static void Log<TPublic, TPrivate>(this ApiGroup<TPublic, TPrivate> value, string name = null)
-		{
-			Print($"id: {value.Id} - name: {value.Name} - leader: {value.Leader} - members: {value.Members} - privateData: {value.PrivateData} - publicData: {value.PublicData} ", name);
-		}
-
 		private static void Print(object value, string name)
 		{
 			if(string.IsNullOrEmpty(name))

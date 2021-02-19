@@ -16,26 +16,30 @@ namespace Indiebackend.API.Services.Groups
 			return Post<ApiGroup<TPublic, TPrivate>>("/", rq, profileToken);
 		}
 
-		public Task<ApiGroup<TPublic, TPrivate>> Get<TPublic, TPrivate>(string id, string profileToken)
+		public Task<ApiGroup<TPublic, TPrivate>> Get<TPublic, TPrivate>(string groupId, string profileToken)
 		{
-			return Get<ApiGroup<TPublic, TPrivate>>("/" + id, profileToken);
+			return Get<ApiGroup<TPublic, TPrivate>>("/" + groupId, profileToken);
 		}
 
-		public async Task<bool> Delete(string id, string profileToken)
+		public async Task<bool> Delete(string groupId, string profileToken)
 		{
-			DeleteGroupResult res = await Delete<DeleteGroupResult>("/" + id, profileToken);
+			DeleteGroupResult res = await Delete<DeleteGroupResult>("/" + groupId, profileToken);
 			return res.Deleted;
 		}
 
-		public Task<JoinGroupResult<TPublic, TPrivate>> Join<TPublic, TPrivate>(string id, string profileToken)
+		public Task<UpdateGroupResult<TPublic, TPrivate>> Join<TPublic, TPrivate>(string groupId, string profileToken)
 		{
-			return Patch<JoinGroupResult<TPublic, TPrivate>>($"/{id}/join", null, profileToken);
+			return Patch<UpdateGroupResult<TPublic, TPrivate>>($"/{groupId}/join", null, profileToken);
 		}
 
-		public Task<ApiGroup<TPublic, TPrivate>> SetData<TPublic, TPrivate>(string id, SetGroupDataRequest<TPublic, TPrivate> rq, string profileToken)
+		public Task<ApiGroup<TPublic, TPrivate>> SetData<TPublic, TPrivate>(string groupId, SetGroupDataRequest<TPublic, TPrivate> rq, string profileToken)
 		{
-			return Patch<ApiGroup<TPublic, TPrivate>>($"/{id}/data", rq, profileToken);
+			return Patch<ApiGroup<TPublic, TPrivate>>($"/{groupId}/data", rq, profileToken);
 		}
-		
+
+		public Task<UpdateGroupResult<TPublic, TPrivate>> SetLeader<TPublic, TPrivate>(string groupId, string leaderId, string profileToken) {
+			return Patch<UpdateGroupResult<TPublic, TPrivate>>($"/{groupId}/leader?leader={leaderId}", null, profileToken);
+		}
+
 	}
 }

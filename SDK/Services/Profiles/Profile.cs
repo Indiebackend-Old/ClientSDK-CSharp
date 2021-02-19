@@ -7,6 +7,8 @@ namespace Indiebackend.SDK.Services
 	public class Profile : ApiProfile
 	{
 
+		public Groups Groups { get; private set; }
+
 		private IndiebackendAPI _api;
 		private string _playerToken;
 
@@ -48,6 +50,7 @@ namespace Indiebackend.SDK.Services
 			CreatedAt = profile.CreatedAt;
 			UpdatedAt = profile.UpdatedAt;
 			Token = token ?? Token;
+			Groups = new Groups(_api, Token);
 		}
 
 	}

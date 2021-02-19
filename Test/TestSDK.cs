@@ -5,6 +5,7 @@ using Indiebackend.API.Structures;
 using Indiebackend.API.Structures.Errors;
 using Indiebackend.API.Utils.Extensions;
 using Indiebackend.SDK.Services;
+using Indiebackend.API.Services.Groups.Requests;
 
 namespace Test.SDK
 {
@@ -29,12 +30,17 @@ namespace Test.SDK
 
 				var profile = await (await player.Profiles.List()).First().Use();
 				await profile.Use();
-				profile.Log();
 
-				await Task.Delay(10000);
+				Group<object, object> group = await profile.Groups.Get<object, object>("c22ThIHM1DVXJHkHeaah");
 
-				await profile.Refresh();
-				profile.DisplayName.Log();
+				group.Log();
+
+				(await group.SetPublicData("This is where the fun begin !")).PublicData.Log();
+				(await group.SetPrivateData("I am your father")).PrivateData.Log();
+
+				group.Log();
+
+				(await group.SetData("Oh no !", "Anyway")).Log();
 			}
 			catch (IndieBackendError e)
 			{
