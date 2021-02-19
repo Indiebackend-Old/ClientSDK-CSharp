@@ -33,12 +33,18 @@ namespace Test.SDK
 				var profile = await (await player.Profiles.List()).First().Use();
 				await profile.Use();
 
-				Group<object, object> group = await profile.Groups.Get<object, object>("c22ThIHM1DVXJHkHeaah");
+				Group<object, object> group = await profile.Groups.Join<object, object>("lHGNJ6eP8fJtXIhxVoMp");
 
-				// await group.SetPublicData("This is where the fun begin !");
-				// await group.SetPrivateData("I am your father");
+				//await group.SetPublicData("This is where the fun begin !");
+				// await group.SetPrivateData("This is private");
 
-				await group.SetData("Oh no !", "Anyway");
+				// await group.SetData("Oh no !", "Anyway");
+
+				// await group.SetLeader("12345678912345678900");
+
+				// await group.Leave();
+
+				// (await group.Delete()).Log("Deleted ?");
 
 				await Task.Delay(2000);
 			}

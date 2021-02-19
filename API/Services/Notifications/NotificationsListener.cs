@@ -1,4 +1,5 @@
 using System;
+using Indiebackend.API.Services.Notifications.Groups;
 using Indiebackend.API.Utils.Extensions;
 using Newtonsoft.Json.Linq;
 using ScClient;
@@ -33,11 +34,25 @@ namespace Indiebackend.API.Services.Notifications
 			switch (type)
 			{
 				case "GROUP_DATA_UPDATED":
-					string groupId = ((JObject)data["group"])["id"].Value<string>();
-					OnNotification.Invoke(new GroupUpdatedNotification(groupId));
+					OnNotification?.Invoke(new GroupUpdatedNotification(data));
+					break;
+				case "GROUP_CREATED":
+					OnNotification?.Invoke(new GroupCreatedNotification(data));
+					break;
+				case "GROUP_DELETED":
+					OnNotification?.Invoke(new GroupDeletedNotification(data));
+					break;
+				case "GROUP_LEFT":
+					OnNotification?.Invoke(new GroupLeftNotification(data));
+					break;
+				case "GROUP_SET_LEADER":
+					OnNotification?.Invoke(new GroupSetLeaderNotification(data));
+					break;
+				case "GROUP_JOINED":
+					OnNotification?.Invoke(new GroupJoinedNotification(data));
 					break;
 				default:
-					OnNotification.Invoke(new BasicNotification(type));
+					OnNotification?.Invoke(new BasicNotification(type));
 					break;
 			}
 		}

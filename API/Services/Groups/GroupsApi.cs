@@ -37,8 +37,14 @@ namespace Indiebackend.API.Services.Groups
 			return Patch<ApiGroup<TPublic, TPrivate>>($"/{groupId}/data", rq, profileToken);
 		}
 
-		public Task<UpdateGroupResult<TPublic, TPrivate>> SetLeader<TPublic, TPrivate>(string groupId, string leaderId, string profileToken) {
+		public Task<UpdateGroupResult<TPublic, TPrivate>> SetLeader<TPublic, TPrivate>(string groupId, string leaderId, string profileToken)
+		{
 			return Patch<UpdateGroupResult<TPublic, TPrivate>>($"/{groupId}/leader?leader={leaderId}", null, profileToken);
+		}
+
+		public Task<LeaveGroupResult<TPublic, TPrivate>> Leave<TPublic, TPrivate>(string groupId, string profileToken)
+		{
+			return Patch<LeaveGroupResult<TPublic, TPrivate>>($"/{groupId}/leave", null, profileToken);
 		}
 
 	}

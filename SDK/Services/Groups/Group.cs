@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Indiebackend.API;
 using Indiebackend.API.Services.Groups;
 using Indiebackend.API.Services.Groups.Requests;
+using Indiebackend.API.Services.Groups.Results;
 
 namespace Indiebackend.SDK.Services
 {
@@ -50,6 +51,16 @@ namespace Indiebackend.SDK.Services
 			UpdateFromAPI(res);
 
 			return this;;
+		}
+
+		public async Task<LeaveGroupResult<TPublic, TPrivate>> Leave() {
+			return await _api.Groups.Leave<TPublic, TPrivate>(Id, _profileToken);
+		}
+
+		public async Task<Group<TPublic, TPrivate>> Refresh() {
+			var res = await _api.Groups.Get<TPublic, TPrivate>(Id, _profileToken);
+			UpdateFromAPI(res);
+			return this;
 		}
 
 		private void UpdateFromAPI(ApiGroup<TPublic, TPrivate> res)
