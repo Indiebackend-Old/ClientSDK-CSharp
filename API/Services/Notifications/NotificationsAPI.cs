@@ -1,4 +1,5 @@
-﻿using Indiebackend.API.Utils;
+﻿using Indiebackend.API.Messaging;
+using Indiebackend.API.Utils;
 using Indiebackend.API.Utils.Extensions;
 using ScClient;
 using SuperSocket.ClientEngine;
@@ -8,21 +9,15 @@ namespace Indiebackend.API.Services.Notifications
 	public class NotificationsAPI : IndiebackendService
 	{
 
-		private Socket _socket;
+		private MessagingAPI _messagingAPI;
 
-		public NotificationsAPI(HttpUtils http, string host) : base(http, "/notifications")
+		public NotificationsAPI(HttpUtils http, MessagingAPI messagingAPI) : base(http, "/notifications")
 		{
-			// Technically this service has no use for http... but maybe in the future ?
-			host.Log();
-			_socket = new Socket(host);
-			_socket.SetListerner(new SocketListener());
-
-			_socket.SetReconnectStrategy(new ReconnectStrategy().SetMaxAttempts(30));
-			_socket.Connect();
+			_messagingAPI = messagingAPI;
 		}
 
 		public NotificationsListener Subscribe(string channelName) {
-			var channel = _socket.CreateChannel(channelName);
+			var channel = _messagingAPI.GetChannel(channelName);
 			return new NotificationsListener(channel, channelName);
 		}
 

@@ -1,4 +1,5 @@
 using System;
+using Indiebackend.API.Messaging;
 using Indiebackend.API.Services.Notifications.Groups;
 using Indiebackend.API.Utils.Extensions;
 using Newtonsoft.Json.Linq;
@@ -10,25 +11,19 @@ namespace Indiebackend.API.Services.Notifications
 	{
 		public event Action<Notification> OnNotification;
 
-		private Socket.Channel channel;
+		private MessagingChannel channel;
 		private string channelName;
 
-		public NotificationsListener(Socket.Channel channel, string channelName)
+		public NotificationsListener(MessagingChannel channel, string channelName)
 		{
 			this.channel = channel;
 			this.channelName = channelName;
 
-			channel.Subscribe();
-
-			channel.OnMessage(ParseRawData);
+			channel.OnMessage += ParseRawData;
 		}
 
-		private void ParseRawData(string channelName, object rawData)
+		private void ParseRawData(JObject payload)
 		{
-			if (!(rawData is JObject))
-				return;
-
-			JObject payload = (JObject)rawData;
 			string type = payload["type"].Value<string>();
 			JObject data = (JObject)payload["data"];
 			switch (type)
