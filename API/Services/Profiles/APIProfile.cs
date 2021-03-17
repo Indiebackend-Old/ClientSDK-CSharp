@@ -6,7 +6,7 @@ namespace Indiebackend.API.Services.Profiles
 	{
 		public string Id { get; set; }
 		public string AppId { get; set; }
-		[JsonProperty("owner")] public string Owner { get; set; }
+		[JsonProperty("owner")] public string OwnerId { get; set; }
 		public string Name { get; set; }
 		public string DisplayName { get; set; }
 		public string AvatarUrl { get; set; }

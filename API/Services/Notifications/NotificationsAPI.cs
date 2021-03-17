@@ -1,24 +1,23 @@
-﻿using Indiebackend.API.Messaging;
+﻿using System.Threading.Tasks;
+using Indiebackend.API.Messaging;
 using Indiebackend.API.Utils;
-using Indiebackend.API.Utils.Extensions;
-using ScClient;
-using SuperSocket.ClientEngine;
 
 namespace Indiebackend.API.Services.Notifications
 {
-	public class NotificationsAPI : IndiebackendService
+	public class NotificationsApi : IndiebackendService
 	{
 
-		private MessagingAPI _messagingAPI;
+		private readonly MessagingApi _messagingApi;
 
-		public NotificationsAPI(HttpUtils http, MessagingAPI messagingAPI) : base(http, "/notifications")
+		public NotificationsApi(HttpUtils http, MessagingApi messagingApi) : base(http, "/notifications")
 		{
-			_messagingAPI = messagingAPI;
+			_messagingApi = messagingApi;
 		}
 
-		public NotificationsListener Subscribe(string channelName) {
-			var channel = _messagingAPI.GetChannel(channelName);
-			return new NotificationsListener(channel, channelName);
+		public async Task<NotificationsListener> Subscribe(string appId, string type, string id)
+		{
+			string channelName = $"{appId}/{type}/{id}";
+			return new NotificationsListener(await _messagingApi.GetChannel(channelName));
 		}
 
 	}

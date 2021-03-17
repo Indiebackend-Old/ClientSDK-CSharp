@@ -7,9 +7,9 @@ namespace Indiebackend.API.Services.Notifications.Groups
 
 		public string JoinedBy { get; }
 
-		public GroupJoinedNotification(JObject data) : base("GROUP_JOINED", data)
+		public GroupJoinedNotification(JToken data) : base("GROUP_JOINED", data)
 		{
-			JoinedBy = data["joinedBy"].Value<string>();
+			JoinedBy = data.Value<string>("joinedBy");
 		}
 	}
 }

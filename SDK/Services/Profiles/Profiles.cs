@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Indiebackend.API;
+using Indiebackend.API.Messaging;
 using Indiebackend.API.Utils.Extensions;
 
 namespace Indiebackend.SDK.Services
@@ -11,11 +12,13 @@ namespace Indiebackend.SDK.Services
 
 		private string _playerToken;
 		private IndiebackendAPI _api;
+		private Player _player;
 
-		public Profiles(IndiebackendAPI api, string token)
+		public Profiles(IndiebackendAPI api, string token, Player playerApi)
 		{
 			_playerToken = token;
 			_api = api;
+			_player = playerApi;
 		}
 
 		public async Task<Profile> Create(string name, string displayName = null, string avatarUrl = null) {
@@ -25,18 +28,18 @@ namespace Indiebackend.SDK.Services
 				AvatarUrl = avatarUrl
 			}, _playerToken);
 
-			return new Profile(_api, _playerToken, res);
+			return new Profile(_api, _playerToken, res, _player);
 		}
 
 		public async Task<List<Profile>> List()
 		{
 			var res = await _api.Profiles.List(_playerToken);
-			return res.Select(e => new Profile(_api, _playerToken, e)).ToList();
+			return res.Select(e => new Profile(_api, _playerToken, e, _player)).ToList();
 		}
 
 		public async Task<Profile> Get(string profileId) {
 			var res = await _api.Profiles.Get(profileId, _playerToken);
-			return new Profile(_api, _playerToken, res);
+			return new Profile(_api, _playerToken, res, _player);
 		}
 
 	}

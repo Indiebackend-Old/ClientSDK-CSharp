@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Indiebackend.API;
+using Indiebackend.API.Utils.Extensions;
 using Indiebackend.SDK.Services;
 
 namespace Indiebackend.SDK
@@ -17,8 +19,6 @@ namespace Indiebackend.SDK
 
 			Players = new Players(_api);
 		}
-
-
 
 	}
 }

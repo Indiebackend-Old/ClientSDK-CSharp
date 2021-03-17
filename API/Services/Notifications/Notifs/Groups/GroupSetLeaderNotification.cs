@@ -7,9 +7,9 @@ namespace Indiebackend.API.Services.Notifications.Groups
 
 		public string NewLeader { get; }
 
-		public GroupSetLeaderNotification(JObject data) : base("GROUP_SET_LEADER", data)
+		public GroupSetLeaderNotification(JToken data) : base("GROUP_SET_LEADER", data)
 		{
-			NewLeader = data["newLeader"].Value<string>();
+			NewLeader = data.Value<string>("newLeader");
 		}
 	}
 }

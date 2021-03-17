@@ -8,9 +8,9 @@ namespace Indiebackend.API.Services.Notifications.Groups
 
 		public string GroupId { get; }
 
-		public GroupNotification(string type, JObject data) : base(type)
+		protected GroupNotification(string type, JToken data) : base(type)
 		{
-			GroupId = ((JObject)data["group"])["id"].Value<string>();
+			GroupId = data["group"]?.Value<string>("id");
 		}
 	}
 }

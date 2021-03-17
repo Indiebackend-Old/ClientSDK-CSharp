@@ -8,6 +8,7 @@ using Indiebackend.API.Structures;
 using Indiebackend.API.Structures.Errors;
 using Indiebackend.API.Utils.Extensions;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Indiebackend.API.Utils
 {
@@ -68,8 +69,6 @@ namespace Indiebackend.API.Utils
 			using HttpResponseMessage response = await _client.SendAsync(request);
 
 			await EnsureValidResponse(response);
-
-			//(await response.Content.ReadAsStringAsync()).Log();
 
 			return DeserializeJsonFromStream<T>(await response.Content.ReadAsStreamAsync());
 		}

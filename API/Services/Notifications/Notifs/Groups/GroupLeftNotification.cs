@@ -8,10 +8,10 @@ namespace Indiebackend.API.Services.Notifications.Groups
 		public string LeftBy { get; }
 		public bool Deleted { get; }
 
-		public GroupLeftNotification(JObject data) : base("GROUP_LEFT", data)
+		public GroupLeftNotification(JToken data) : base("GROUP_LEFT", data)
 		{
-			LeftBy = data["leftBy"].Value<string>();
-			Deleted = data["deleted"].Value<bool>();
+			LeftBy = data.Value<string>("leftBy");
+			Deleted = data.Value<bool>("deleted");
 		}
 	}
 }

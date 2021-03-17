@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Indiebackend.API.Messaging;
 using Indiebackend.API.Services;
 using Indiebackend.API.Services.Groups;
@@ -12,14 +13,17 @@ namespace Indiebackend.API
 	public class IndiebackendAPI
 	{
 
+		// private const string API_GATEWAY = "http://dev.api.indiebackend.com";
+		// private const string SOCKETCLUSTER_HOST = "ws://dev.api.indiebackend.com/messaging/socketcluster/";
+
 		private const string API_GATEWAY = "http://localhost:3000";
-		private const string SOCKETCLUSTER_HOST = "ws://localhost:8000/socketcluster/";
+
 
 		public PlayersApi Players { get; }
 		public ProfilesApi Profiles { get; }
 		public GroupsApi Groups { get; }
-		public NotificationsAPI Notifications { get; }
-		public MessagingAPI Messaging { get; }
+		public NotificationsApi Notifications { get; private set; }
+		public MessagingApi Messaging { get; private set; }
 
 		public IndiebackendAPI(string appId)
 		{
@@ -31,10 +35,7 @@ namespace Indiebackend.API
 			Profiles = new ProfilesApi(http);
 			Groups = new GroupsApi(http);
 
-			// Socketcluster-dependant Services initialization
-
-			Messaging = new MessagingAPI(SOCKETCLUSTER_HOST);
-			Notifications = new NotificationsAPI(http, Messaging);
 		}
+
 	}
 }

@@ -1,47 +1,48 @@
 using System;
+using System.Threading.Tasks;
+using Indiebackend.API.Utils.Extensions;
 using Newtonsoft.Json.Linq;
-using ScClient;
 
 namespace Indiebackend.API.Messaging
 {
 	public class MessagingChannel
 	{
 
-		public event Action<JObject> OnMessage;
-		public event Action OnSubscribed;
+		public event Action<JToken> OnMessage;
 		public event Action<object> OnError;
 		public event Action OnUnsubscribed;
 
 		public string ChannelName { get; }
 
-		private Socket.Channel _channel;
+		private readonly MessagingApi _messagingApi;
 
-		public MessagingChannel(Socket.Channel channel)
+		public MessagingChannel(MessagingApi messagingApi, string channelName)
 		{
-			_channel = channel;
-			ChannelName = channel.GetChannelName();
-
-			channel.Subscribe((channelName, error, data) => {
-				if(error == null)
-					OnSubscribed?.Invoke();
-				else
-					OnError?.Invoke(error);
-			});
-
-			channel.OnMessage((channelName, data) => {
-				if(data is JObject)
-					OnMessage?.Invoke((JObject) data);
-				else
-					System.Console.WriteLine("Got a non-json message " + data);
-			});
+			_messagingApi = messagingApi;
+			ChannelName = channelName;
 		}
-
+		
 		public void Publish(object data) {
-			_channel.Publish(data);
+			
 		}
 
-		public void Unsubscribe() {
-			_channel.Unsubscribe((channelName, error, data) => OnUnsubscribed?.Invoke());
+		public async Task Unsubscribe() {
+			await _messagingApi.DeleteChannel(ChannelName);
+		}
+
+		public void InvokeOnMessage(JToken obj)
+		{
+			OnMessage?.Invoke(obj);
+		}
+
+		public void InvokeOnError(object error)
+		{
+			OnError?.Invoke(error);
+		}
+
+		public void InvokeOnUnsubscribed()
+		{
+			OnUnsubscribed?.Invoke();
 		}
 
 	}

@@ -6,7 +6,7 @@ namespace Indiebackend.API.Services.Notifications.Groups
 	public class GroupCreatedNotification : GroupNotification
 	{
 
-		public GroupCreatedNotification(JObject data) : base("GROUP_CREATED", data)
+		public GroupCreatedNotification(JToken data) : base("GROUP_CREATED", data)
 		{
 		}
 	}
