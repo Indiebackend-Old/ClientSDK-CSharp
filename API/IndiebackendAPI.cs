@@ -12,22 +12,16 @@ namespace Indiebackend.API
 	// ReSharper disable once InconsistentNaming
 	public class IndiebackendAPI
 	{
-
-		// private const string API_GATEWAY = "http://dev.api.indiebackend.com";
-		// private const string SOCKETCLUSTER_HOST = "ws://dev.api.indiebackend.com/messaging/socketcluster/";
-
-		private const string API_GATEWAY = "http://localhost:3000";
-
-
+		
 		public PlayersApi Players { get; }
 		public ProfilesApi Profiles { get; }
 		public GroupsApi Groups { get; }
-		public NotificationsApi Notifications { get; private set; }
-		public MessagingApi Messaging { get; private set; }
+
+		private readonly HttpUtils http;
 
 		public IndiebackendAPI(string appId)
 		{
-			HttpUtils http = new HttpUtils(API_GATEWAY, appId);
+			http = new HttpUtils(Constants.API_GATEWAY, appId);
 
 			// HTTP Services initialization
 
@@ -37,5 +31,10 @@ namespace Indiebackend.API
 
 		}
 
+		public HttpUtils GetHttp()
+		{
+			return http;
+		}
+		
 	}
 }

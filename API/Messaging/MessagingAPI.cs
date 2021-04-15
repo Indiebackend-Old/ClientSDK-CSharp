@@ -10,7 +10,6 @@ namespace Indiebackend.API.Messaging
 {
 	public class MessagingApi
 	{
-		private const string HOST = "ws://localhost:8000";
 
 		private readonly SocketIO _socket;
 		private readonly Dictionary<string, TaskCompletionSource<bool>> _taskCompletionSources;
@@ -21,7 +20,7 @@ namespace Indiebackend.API.Messaging
 			_taskCompletionSources = new Dictionary<string, TaskCompletionSource<bool>>();
 			_messagingChannels = new Dictionary<string, MessagingChannel>();
 
-			_socket = new SocketIO(HOST, new SocketIOOptions
+			_socket = new SocketIO(Constants.MESSAGING_GATEWAY, new SocketIOOptions
 			{
 				EIO = 4,
 				Query = new Dictionary<string, string>
