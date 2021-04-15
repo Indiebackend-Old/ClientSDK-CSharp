@@ -17,9 +17,14 @@ namespace Indiebackend.API.Services.Stats
 			return Get<GetStatsResult>("/profile", token);
 		}
 
-		public Task<GetStatsResult> SetProfile(SetStatsRequest rq, string token)
+		public Task<GetStatsResult> SetProfile(EditStatsRequest rq, string token)
 		{
 			return Post<GetStatsResult>("/profile", rq, token);
+		}
+
+		public Task<GetStatsResult> UpdateProfile(EditStatsRequest rq, string token)
+		{
+			return Patch<GetStatsResult>("/profile", rq, token);
 		}
 		
 	}

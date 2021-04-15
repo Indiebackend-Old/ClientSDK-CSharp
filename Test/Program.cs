@@ -42,7 +42,7 @@ namespace Test
 
 				//GetStatsResult stats = await _api.Stats.GetProfile(profileToken);
 
-				(await _api.Stats.SetProfile(new SetStatsRequest
+				(await _api.Stats.SetProfile(new EditStatsRequest
 				{
 					PrivateStats = new Dictionary<string, object>
 					{
@@ -56,7 +56,13 @@ namespace Test
 					}
 				}, profileToken)).Log();
 				
-				
+			(await _api.Stats.UpdateProfile(new EditStatsRequest
+			{
+				PrivateStats = new Dictionary<string, object>
+				{
+					{"test", true},
+				}
+			}, profileToken)).Log();	
 
 				// 	await TestGroup(_api, profileToken);
 			}

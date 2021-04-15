@@ -2,7 +2,7 @@
 
 namespace Indiebackend.API.Services.Stats.Requests
 {
-	public class SetStatsRequest
+	public class EditStatsRequest
 	{
 
 		[JsonProperty("privateStats")] public object PrivateStats;
