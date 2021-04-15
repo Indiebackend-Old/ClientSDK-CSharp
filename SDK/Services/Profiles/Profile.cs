@@ -12,6 +12,7 @@ namespace Indiebackend.SDK.Services
 
 		public Player Owner { get; private set; }
 		public Groups Groups { get; private set; }
+		public Stats Stats { get; private set; }
 
 		private readonly IndiebackendAPI _api;
 		private readonly string _playerToken;
@@ -64,6 +65,7 @@ namespace Indiebackend.SDK.Services
 			UpdatedAt = profile.UpdatedAt;
 			Token = token ?? Token;
 			Groups = new Groups(_api, this);
+			Stats = new Stats(_api, this);
 		}
 
 	}

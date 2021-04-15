@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using Indiebackend.API.Messaging;
@@ -7,6 +8,7 @@ using Indiebackend.API.Structures.Errors;
 using Indiebackend.API.Utils.Extensions;
 using Indiebackend.SDK.Services;
 using Indiebackend.API.Services.Groups.Requests;
+using Indiebackend.API.Services.Stats.Requests;
 using SocketIOClient;
 
 namespace Test.SDK
@@ -41,31 +43,13 @@ namespace Test.SDK
 				Profile profile = await (await player.Profiles.List()).First().Use();
 				await (await profile.Use()).WithMessaging();
 
-				var group = await (await profile.Groups.Create<object, object>(new CreateGroupRequest
+				(await profile.Stats.Set(new EditStatsRequest
 				{
-					Name = "Test group",
-					PrivateData = "this is private",
-					PublicData = "this is public"
-				})).WithMessaging();
-
-				group.Log();
-
-				await group.SetPublicData("This is where the fun begin !");
-				await group.SetPrivateData("This is private");
-
-				// group.Log();
-
-				// await group.SetData("Oh no !", "Anyway");
-
-				// group.Log();
-
-				//await group.SetLeader("12345678912345678900");
-
-				await group.Leave();
-
-				(await group.Delete()).Log("Deleted ?");
-
-				await Task.Delay(10000);
+					PrivateStats = new Dictionary<string, object>
+					{
+						{"updated", true}
+					}
+				})).Log();
 			}
 			catch (IndieBackendError e)
 			{
@@ -81,6 +65,35 @@ namespace Test.SDK
 
 				$"[{e.Error}] - (HTTP Code: {e.StatusCode}) {e.Message}".Log();
 			}
+		}
+
+		private static async Task TestGroup(Profile profile)
+		{
+			var group = await (await profile.Groups.Create<object, object>(new CreateGroupRequest
+			{
+				Name = "Test group",
+				PrivateData = "this is private",
+				PublicData = "this is public"
+			})).WithMessaging();
+
+			group.Log();
+
+			await group.SetPublicData("This is where the fun begin !");
+			await group.SetPrivateData("This is private");
+
+			// group.Log();
+
+			// await group.SetData("Oh no !", "Anyway");
+
+			// group.Log();
+
+			//await group.SetLeader("12345678912345678900");
+
+			await group.Leave();
+
+			(await group.Delete()).Log("Deleted ?");
+
+			await Task.Delay(10000);
 		}
 	}
 }
