@@ -20,5 +20,10 @@ namespace Indiebackend.API.Services.Notifications
 			return new NotificationsListener(await _messagingApi.GetChannel(channelName));
 		}
 
+		public async Task GetPersistantNotifications(string token)
+		{
+			
+		}
+		
 	}
 }

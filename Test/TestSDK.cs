@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using System.Linq;
+using Indiebackend.API.Messaging;
 using Indiebackend.API.Services.Players.Requests;
 using Indiebackend.API.Structures;
 using Indiebackend.API.Structures.Errors;
@@ -10,20 +11,23 @@ using SocketIOClient;
 
 namespace Test.SDK
 {
-	public class TestSDK
+	public static class TestSdk
 	{
-		//private const string APP_ID = "exampleapp-zq8rq";
+#if DEBUG
 		private const string APP_ID = "exampleapp-hczt5";
+#endif
+#if TEST
+		private const string APP_ID = "exampleapp-bhow9";
+#endif
 
 		private static Indiebackend.SDK.Indiebackend _api;
 
 		public static async Task Test()
 		{
 			_api = new Indiebackend.SDK.Indiebackend(APP_ID);
-			
+
 			try
 			{
-
 				"Registering player...".Log();
 
 				Player player = await (await _api.Players.LoginWithEmail(new LoginPlayerEmailRequest
@@ -78,6 +82,5 @@ namespace Test.SDK
 				$"[{e.Error}] - (HTTP Code: {e.StatusCode}) {e.Message}".Log();
 			}
 		}
-
 	}
 }

@@ -43,7 +43,7 @@ namespace Indiebackend.SDK.Services
 			await _messaging.Connect();
 			
 			// Subscribe to player channel
-			Notifications = new NotificationsApi(null, _messaging);
+			Notifications = new NotificationsApi(_api.GetHttp(), _messaging);
 			_playerNotifications = await Notifications.Subscribe(AppId, "player", Id);
 			return this;
 		}
@@ -62,7 +62,7 @@ namespace Indiebackend.SDK.Services
 			UpdatedAt = player.UpdatedAt;
 			Token = token ?? Token;
 			IsLoggedIn = !string.IsNullOrEmpty(token);
-			Profiles = IsLoggedIn ? new Profiles(_api, token, this) : null;
+			Profiles = IsLoggedIn ? new Profiles(_api, this) : null;
 		}
 		
 	}

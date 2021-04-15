@@ -7,7 +7,7 @@ namespace Indiebackend.API.Services.Profiles
 {
 	public class ProfilesApi : IndiebackendService
 	{
-		public ProfilesApi(HttpUtils http) : base(http, "/profiles")
+		internal ProfilesApi(HttpUtils http) : base(http, "/profiles")
 		{
 		}
 

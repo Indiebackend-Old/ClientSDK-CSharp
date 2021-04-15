@@ -1,57 +1,85 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Indiebackend.API;
 using Indiebackend.API.Services.Groups;
 using Indiebackend.API.Services.Groups.Requests;
 using Indiebackend.API.Services.Players.Requests;
+using Indiebackend.API.Services.Stats.Requests;
+using Indiebackend.API.Services.Stats.Results;
 using Indiebackend.API.Structures;
 using Indiebackend.API.Structures.Errors;
 using Indiebackend.API.Utils.Extensions;
+using Newtonsoft.Json.Linq;
 using Test.SDK;
 
 namespace Test
 {
 	internal static class Program
 	{
-		private const string APP_ID = "exampleapp-zq8rq";
+		private const string APP_ID = "exampleapp-hczt5";
 
 		private static IndiebackendAPI _api;
 
 		private static async Task Main(string[] args)
 		{
-			await TestSDK.Test();
-			// _api = new IndiebackendAPI(APP_ID);
+			//await TestSdk.Test();
+			_api = new IndiebackendAPI(APP_ID);
 
-			// try
-			// {
-			// 	"Login player".Log();
-			// 	string playerToken = (await _api.Players.Login(new LoginPlayerEmailRequest()
-			// 	{
-			// 		Email = "julien.lavocat@gmail.com",
-			// 		Password = "220100Jl!"
-			// 	})).Token;
+			try
+			{
+				"Login player".Log();
+				string playerToken = (await _api.Players.Login(new LoginPlayerEmailRequest()
+				{
+					Email = "julien.lavocat@gmail.com",
+					Password = "220100Jl!"
+				})).Token;
 
-			// 	"Getting player profile".Log();
+				"Getting player profile".Log();
 
-			// 	string profileToken = (await _api.Profiles.Use((await _api.Profiles.List(playerToken))[0].Id,
-			// 		playerToken)).Token;
+				string profileToken = (await _api.Profiles.Use((await _api.Profiles.List(playerToken))[0].Id,
+					playerToken)).Token;
 
-			// 	await TestGroup(_api, profileToken);
-			// }
-			// catch (IndieBackendError e)
-			// {
-			// 	if (e is BadRequestException exception)
-			// 	{
-			// 		if (exception.HasInvalidFields)
-			// 			$"[{exception.Error}] - {exception.Fields.First()}".Log();
-			// 		else
-			// 			$"[{exception.Error}] - {exception.Message}".Log();
+				//GetStatsResult stats = await _api.Stats.GetProfile(profileToken);
 
-			// 		return;
-			// 	}
+				(await _api.Stats.SetProfile(new EditStatsRequest
+				{
+					PrivateStats = new Dictionary<string, object>
+					{
+						{"test", true},
+						{"private", 1}
+					},
+					PublicStats = new Dictionary<string, object>
+					{
+						{"test", false},
+						{"private", 0}
+					}
+				}, profileToken)).Log();
+				
+			(await _api.Stats.UpdateProfile(new EditStatsRequest
+			{
+				PrivateStats = new Dictionary<string, object>
+				{
+					{"test", true},
+				}
+			}, profileToken)).Log();	
 
-			// 	$"[{e.Error}] - (HTTP Code: {e.StatusCode}) {e.Message}".Log();
-			// }
+				// 	await TestGroup(_api, profileToken);
+			}
+			catch (IndieBackendError e)
+			{
+				if (e is BadRequestException exception)
+				{
+					if (exception.HasInvalidFields)
+						$"[{exception.Error}] - {exception.Fields.First()}".Log();
+					else
+						$"[{exception.Error}] - {exception.Message}".Log();
+
+					return;
+				}
+
+				$"[{e.Error}] - (HTTP Code: {e.StatusCode}) {e.Message}".Log();
+			}
 		}
 
 		private static async Task TestGroup(IndiebackendAPI api, string profileToken)

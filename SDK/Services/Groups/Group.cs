@@ -27,7 +27,7 @@ namespace Indiebackend.SDK.Services
 		public async Task<Group<TPublic, TPrivate>> WithMessaging()
 		{
 			_notifications = await _notificationsApi.Subscribe(AppId, "group", Id);
-			_notifications.OnNotification += (notification) => notification.Log($"[{Id}] [Notification]");
+			_notifications.OnNotification += (notification) => notification.Log($"[Group-{Id}] [Notification]");
 			return this;
 		}
 

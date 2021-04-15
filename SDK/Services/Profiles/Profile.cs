@@ -13,14 +13,14 @@ namespace Indiebackend.SDK.Services
 		public Player Owner { get; private set; }
 		public Groups Groups { get; private set; }
 
-		private IndiebackendAPI _api;
-		private string _playerToken;
+		private readonly IndiebackendAPI _api;
+		private readonly string _playerToken;
 		private NotificationsListener _notifications;
 
-		public Profile(IndiebackendAPI api, string playerToken, ApiProfile profile, Player player)
+		public Profile(IndiebackendAPI api, ApiProfile profile, Player player)
 		{
 			_api = api;
-			_playerToken = playerToken;
+			_playerToken = player.Token;
 			Owner = player;
 			UpdateFromApiResult(profile);
 		}
@@ -48,7 +48,7 @@ namespace Indiebackend.SDK.Services
 
 		public async Task<bool> Delete()
 		{
-			var res = await _api.Profiles.Delete(Id, _playerToken);
+			DeleteProfileResult res = await _api.Profiles.Delete(Id, _playerToken);
 			return res.Deleted;
 		}
 

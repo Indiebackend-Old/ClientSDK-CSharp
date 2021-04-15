@@ -9,14 +9,11 @@ namespace Indiebackend.SDK.Services
 {
 	public class Profiles
 	{
+		private readonly IndiebackendAPI _api;
+		private readonly Player _player;
 
-		private string _playerToken;
-		private IndiebackendAPI _api;
-		private Player _player;
-
-		public Profiles(IndiebackendAPI api, string token, Player playerApi)
+		public Profiles(IndiebackendAPI api, Player playerApi)
 		{
-			_playerToken = token;
 			_api = api;
 			_player = playerApi;
 		}
@@ -26,20 +23,20 @@ namespace Indiebackend.SDK.Services
 				Name = name,
 				DisplayName = displayName,
 				AvatarUrl = avatarUrl
-			}, _playerToken);
+			}, _player.Token);
 
-			return new Profile(_api, _playerToken, res, _player);
+			return new Profile(_api, res, _player);
 		}
 
 		public async Task<List<Profile>> List()
 		{
-			var res = await _api.Profiles.List(_playerToken);
-			return res.Select(e => new Profile(_api, _playerToken, e, _player)).ToList();
+			var res = await _api.Profiles.List(_player.Token);
+			return res.Select(e => new Profile(_api, e, _player)).ToList();
 		}
 
 		public async Task<Profile> Get(string profileId) {
-			var res = await _api.Profiles.Get(profileId, _playerToken);
-			return new Profile(_api, _playerToken, res, _player);
+			var res = await _api.Profiles.Get(profileId, _player.Token);
+			return new Profile(_api, res, _player);
 		}
 
 	}
