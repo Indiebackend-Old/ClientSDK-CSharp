@@ -11,10 +11,14 @@ using SocketIOClient;
 
 namespace Test.SDK
 {
-	public class TestSDK
+	public static class TestSdk
 	{
+#if DEBUG
+		private const string APP_ID = "exampleapp-hczt5";
+#endif
+#if TEST
 		private const string APP_ID = "exampleapp-bhow9";
-		//private const string APP_ID = "exampleapp-hczt5";
+#endif
 
 		private static Indiebackend.SDK.Indiebackend _api;
 
@@ -78,6 +82,5 @@ namespace Test.SDK
 				$"[{e.Error}] - (HTTP Code: {e.StatusCode}) {e.Message}".Log();
 			}
 		}
-
 	}
 }
