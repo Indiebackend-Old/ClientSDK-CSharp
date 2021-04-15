@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Indiebackend.API;
 using Indiebackend.API.Services.Groups;
 using Indiebackend.API.Services.Groups.Requests;
 using Indiebackend.API.Services.Players.Requests;
+using Indiebackend.API.Services.Stats.Requests;
 using Indiebackend.API.Services.Stats.Results;
 using Indiebackend.API.Structures;
 using Indiebackend.API.Structures.Errors;
@@ -38,8 +40,24 @@ namespace Test
 				string profileToken = (await _api.Profiles.Use((await _api.Profiles.List(playerToken))[0].Id,
 					playerToken)).Token;
 
-				GetStatsResult stats = await _api.Stats.GetProfile(profileToken);
-				stats.PrivateStats.Value<float>("numberValue").Log();
+				//GetStatsResult stats = await _api.Stats.GetProfile(profileToken);
+
+				(await _api.Stats.SetProfile(new SetStatsRequest
+				{
+					PrivateStats = new Dictionary<string, object>
+					{
+						{"test", true},
+						{"private", 1}
+					},
+					PublicStats = new Dictionary<string, object>
+					{
+						{"test", false},
+						{"private", 0}
+					}
+				}, profileToken)).Log();
+				
+				
+
 				// 	await TestGroup(_api, profileToken);
 			}
 			catch (IndieBackendError e)
